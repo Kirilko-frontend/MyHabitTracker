@@ -1,5 +1,5 @@
-import { Habit } from "@/types/habit.types";
-import mongoose, { Schema } from "mongoose";
+import { Habit } from '@/types/habit.types';
+import mongoose, { Schema } from 'mongoose';
 
 const habitSchema = new Schema<Habit>({
   title: {
@@ -29,4 +29,4 @@ const habitSchema = new Schema<Habit>({
 });
 
 export const HabitModel =
-  mongoose.models.Habit || mongoose.model("Habit", habitSchema);
+  mongoose.models.Habit || mongoose.model('Habit', habitSchema);

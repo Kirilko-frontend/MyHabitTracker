@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import connectDB from "@/services/db";
-import { HabitModel } from "@/models/habit.model";
+import { NextResponse } from 'next/server';
+import connectDB from '@/services/db';
+import { HabitModel } from '@/models/habit.model';
 
 export async function PATCH(
   req: Request,
@@ -11,35 +11,34 @@ export async function PATCH(
 
     const body = await req.json();
 
-    const updatedHabit = await HabitModel.findByIdAndUpdate(
-      params.id,
-      body,
-      { new: true }
-    );
+    const updatedHabit = await HabitModel.findByIdAndUpdate(params.id, body, {
+      new: true,
+    });
 
     return NextResponse.json(updatedHabit);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to update habit" },
+      { error: 'Failed to update habit' },
       { status: 500 }
     );
   }
 }
 
-
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
 
-    await HabitModel.findByIdAndDelete(params.id);
+    const { id } = await params;
+
+    await HabitModel.findByIdAndDelete(id);
 
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to delete habit" },
+      { error: 'Failed to delete habit' },
       { status: 500 }
     );
   }

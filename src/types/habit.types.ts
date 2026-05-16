@@ -11,3 +11,11 @@ export interface Habit {
 
   createdAt: Date;
 }
+
+export interface CreateHabit {
+  title: string;
+
+  description: string;
+
+  userId: string;
+}

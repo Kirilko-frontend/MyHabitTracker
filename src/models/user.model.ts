@@ -1,5 +1,5 @@
-import { User } from "@/types/user.types";
-import mongoose, { Schema } from "mongoose";
+import { User } from '@/types/user.types';
+import mongoose, { Schema } from 'mongoose';
 
 const userSchema = new Schema<User>({
   name: {
@@ -20,4 +20,4 @@ const userSchema = new Schema<User>({
 });
 
 export const UserModel =
-  mongoose.models.User || mongoose.model<User>("User", userSchema);
+  mongoose.models.User || mongoose.model<User>('User', userSchema);

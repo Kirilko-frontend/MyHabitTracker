@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import { UserModel } from "@/models/user.model";
-import connectDB from "@/services/db";
+import { NextResponse } from 'next/server';
+import { UserModel } from '@/models/user.model';
+import connectDB from '@/services/db';
 
 export async function POST(req: Request) {
   try {
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     return NextResponse.json(user);
   } catch (error) {
     return NextResponse.json(
-      { error: "Something went wrong" },
+      { error: 'Something went wrong' },
       { status: 500 }
     );
   }
