@@ -1,8 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { createHabit } from '@/api/habits';
+import { useHabits } from '@/hooks/useHabits';
 
 import text from './text';
 
@@ -10,19 +9,12 @@ const HabitForm = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: createHabit,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['habits'] });
-    },
-  });
+  const { createHabit, isLoading } = useHabits();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    mutation.mutate(
+    createHabit(
       {
         title,
         description,
@@ -57,10 +49,10 @@ const HabitForm = () => {
         placeholder={text.placeholderDescription}
       />
       <button
-        disabled={mutation.isPending}
+        disabled={isLoading}
         className="bg-purple-300 text-lg text-white rounded-2xl py-0.5 disabled:opacity-50"
       >
-        {mutation.isPending ? 'Adding...' : text.submitButtonText}
+        {isLoading ? 'Adding...' : text.submitButtonText}
       </button>
     </form>
   );

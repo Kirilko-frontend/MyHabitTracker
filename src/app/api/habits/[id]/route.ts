@@ -1,17 +1,20 @@
 import { NextResponse } from 'next/server';
+
 import connectDB from '@/services/db';
+
 import { HabitModel } from '@/models/habit.model';
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB();
 
+    const { id } = await params;
     const body = await req.json();
 
-    const updatedHabit = await HabitModel.findByIdAndUpdate(params.id, body, {
+    const updatedHabit = await HabitModel.findByIdAndUpdate(id, body, {
       new: true,
     });
 
@@ -26,12 +29,12 @@ export async function PATCH(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     await connectDB();
 
-    const { id } = await params;
+    const { id } = params;
 
     await HabitModel.findByIdAndDelete(id);
 

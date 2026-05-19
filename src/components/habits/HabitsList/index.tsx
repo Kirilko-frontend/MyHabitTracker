@@ -3,14 +3,14 @@ import { Habit } from '@/types/habit.types';
 import HabitCard from '../HabitCard';
 
 interface IProps {
-  data: Habit[];
+  habits: Habit[];
   className?: string;
 }
 
-const HabitsList = ({ data, className }: IProps) => {
+const HabitsList = ({ habits, className }: IProps) => {
   return (
     <ul className={`habits-list ${className || ''}`}>
-      {data.map((habit) => (
+      {habits.map((habit) => (
         <HabitCard key={habit._id} habit={habit} />
       ))}
     </ul>

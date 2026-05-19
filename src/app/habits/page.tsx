@@ -1,20 +1,14 @@
 'use client';
 
-import text from './text';
+import { useHabits } from '@/hooks/useHabits';
+
 import HabitForm from '@/components/habits/HabitForm';
 import HabitsList from '@/components/habits/HabitsList';
-import { useQuery } from '@tanstack/react-query';
-import { getHabits } from '@/api/habits';
 
-const userId = '123';
+import text from './text';
 
 const Habits = () => {
-  const { data = [] } = useQuery({
-    queryKey: ['habits', userId],
-    queryFn: () => getHabits(userId),
-  });
-
-  console.log(data);
+  const { habits } = useHabits();
 
   return (
     <div className="habits flex flex-col items-center gap-4">
@@ -25,7 +19,7 @@ const Habits = () => {
 
       <HabitForm />
 
-      <HabitsList data={data} className="flex flex-col gap-4" />
+      <HabitsList habits={habits} className="flex flex-col gap-4" />
     </div>
   );
 };

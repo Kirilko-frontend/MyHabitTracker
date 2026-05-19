@@ -24,3 +24,18 @@ export const deleteHabit = async (id: string) => {
 
   return res.json();
 };
+
+export const updateHabit = async (
+  id: string,
+  data: Partial<{ title: string; description: string; completed: boolean }>
+) => {
+  const res = await fetch(`/api/habits/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+
+  return res.json();
+};

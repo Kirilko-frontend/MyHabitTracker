@@ -1,40 +1,82 @@
 'use client';
 
-import { deleteHabit } from '@/api/habits';
+import { useEffect, useState } from 'react';
+
+import { useHabits } from '@/hooks/useHabits';
+
 import { Habit } from '@/types/habit.types';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface IProps {
   habit: Habit;
 }
 
 const HabitCard = ({ habit }: IProps) => {
-  const queryClient = useQueryClient();
+  const { deleteHabit, updateHabit } = useHabits();
 
-  const deleteMutation = useMutation({
-    mutationFn: deleteHabit,
-    onSuccess: () => {
-      console.log('invalidate triggered');
-      queryClient.invalidateQueries({ queryKey: ['habits'] });
-    },
-  });
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [title, setTitle] = useState(habit.title);
 
-  const handleDelete = (id: string) => {
-    deleteMutation.mutate(id);
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [description, setDescription] = useState(habit.description);
 
-    console.log(`Deleted habit with id: ${id}`); // Log the deleted habit ID
-  };
+  useEffect(() => {
+    setTitle(habit.title);
+    setDescription(habit.description);
+  }, [habit.title, habit.description]);
 
   return (
     <div
       id={habit._id}
       className="habit-card flex flex-col gap-2 p-4 bg-gray-800 rounded"
     >
-      <h3>{habit.title}</h3>
-      <p>{habit.description}</p>
-      <p>{habit.completed ? 'Completed' : 'Not Completed'}</p>
+      {isEditingTitle ? (
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              updateHabit({
+                id: habit._id,
+                data: { title },
+              });
+              setIsEditingTitle(false);
+            }
+          }}
+        />
+      ) : (
+        <h3 onDoubleClick={() => setIsEditingTitle(true)}>{habit.title}</h3>
+      )}
+      {isEditingDescription ? (
+        <input
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              updateHabit({
+                id: habit._id,
+                data: { description },
+              });
+              setIsEditingDescription(false);
+            }
+          }}
+        />
+      ) : (
+        <p onDoubleClick={() => setIsEditingDescription(true)}>
+          {habit.description}
+        </p>
+      )}
+      <button
+        onClick={() =>
+          updateHabit({
+            id: habit._id,
+            data: { completed: !habit.completed },
+          })
+        }
+      >
+        {habit.completed ? 'Mark as not done' : 'Mark as done'}
+      </button>
       <p>{new Date(habit.createdAt).toLocaleString()}</p>
-      <button onClick={() => handleDelete(habit._id)}>Delete</button>
+      <button onClick={() => deleteHabit(habit._id)}>Delete</button>
     </div>
   );
 };
