@@ -1,7 +1,12 @@
 import { CreateHabit } from '@/types/habit.types';
 
-export const getHabits = async (userId: string) => {
-  const res = await fetch(`/api/habits?userId=${userId}`);
+export const getHabits = async () => {
+  const res = await fetch('/api/habits');
+
+  if (!res.ok) {
+    throw new Error('Failed to fetch habits');
+  }
+
   return res.json();
 };
 

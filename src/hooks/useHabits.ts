@@ -1,13 +1,16 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { useAuth } from './useAuth';
+
 import { createHabit, deleteHabit, getHabits, updateHabit } from '@/api/habits';
 
 export const useHabits = () => {
+  const { userId } = useAuth();
   const queryClient = useQueryClient();
 
   const habitsQuery = useQuery({
     queryKey: ['habits'],
-    queryFn: () => getHabits('123'),
+    queryFn: getHabits,
   });
 
   const createMutation = useMutation({
